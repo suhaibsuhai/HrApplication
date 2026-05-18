@@ -1,13 +1,49 @@
-# HR Application Frontend
+# HR SaaS Application
 
-Enterprise-ready React/Vite SaaS foundation.
+Enterprise-ready React + Vite starter for an HR SaaS application.
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open the URL shown in your terminal, usually:
+
+```txt
+http://localhost:5173
+```
+
+## Build
+
+```bash
+npm run build
+npm run preview
+```
 
 ## Structure
 
-- `src/app` - application composition, config, routes, providers, and future store
-- `src/features` - feature/module boundaries
-- `src/shared` - reusable layout, UI components, hooks, libraries, and styles
+```txt
+src/
+  app/
+  layouts/
+  routes/
+  modules/
+  shared/
+  config/
+  services/
+  hooks/
+  store/
+  utils/
+  styles/
+```
 
-## Current approach
+## Included
 
-The modules are scaffolded for future development. Navigation is config-driven through `src/app/config/moduleRegistry.js`, but the application still keeps a simple single-page experience until full routing/auth/data layers are needed.
+- Enterprise folder structure
+- Config-driven sidebar navigation
+- Header and app shell layout
+- Future-ready module placeholders
+- Dark/light mode with localStorage
+- Reusable shared components
