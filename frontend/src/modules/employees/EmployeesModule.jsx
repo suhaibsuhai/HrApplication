@@ -1,15 +1,29 @@
-import ModulePlaceholder from "../../shared/components/ModulePlaceholder.jsx";
-
 export default function EmployeesModule() {
   return (
-    <ModulePlaceholder
-      title="Employees"
-      description="Future employee directory, profiles, onboarding, documents, and lifecycle management."
-      items={[
-        { title: "Directory", description: "Centralized employee records and search." },
-        { title: "Profiles", description: "Personal, work, compensation, and reporting details." },
-        { title: "Onboarding", description: "Checklist-driven employee onboarding flow." },
-      ]}
-    />
+    <section className="module-page">
+      <p className="eyebrow">Overview</p>
+      <h2>Employees</h2>
+      <p className="module-description">
+        This is the Employees module placeholder. Add routes, API calls, forms, tables, and business workflows here later.
+      </p>
+
+      <div className="cards-grid">
+        <article className="metric-card">
+          <span>Primary Metric</span>
+          <strong>--</strong>
+          <p>Connect real data later.</p>
+        </article>
+        <article className="metric-card">
+          <span>Workflow Status</span>
+          <strong>Ready</strong>
+          <p>Module scaffold is ready.</p>
+        </article>
+        <article className="metric-card">
+          <span>API Integration</span>
+          <strong>Pending</strong>
+          <p>Use services folder for API clients.</p>
+        </article>
+      </div>
+    </section>
   );
 }

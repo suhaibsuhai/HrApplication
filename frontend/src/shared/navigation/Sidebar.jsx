@@ -1,28 +1,30 @@
-export default function Sidebar({ items, activeModuleId, onModuleChange }) {
+import { Menu } from 'lucide-react';
+
+export default function Sidebar({ activeModule, isCollapsed, items, onModuleChange, onToggleSidebar }) {
   return (
-    <aside className="sidebar">
-      <div className="brand-block">
-        <div className="brand-mark">HR</div>
-        <div>
-          <h1>HR Suite</h1>
-          <p>Enterprise SaaS</p>
-        </div>
+    <aside className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
+      <div className="sidebar-header">
+        {!isCollapsed && <span>Main Navigation</span>}
+        <button className="sidebar-toggle" type="button" aria-label="Toggle sidebar" onClick={onToggleSidebar}>
+          <Menu size={22} />
+        </button>
       </div>
 
-      <nav className="sidebar-nav" aria-label="Main navigation">
+      <nav className="module-nav" aria-label="Main navigation">
         {items.map((item) => {
           const Icon = item.icon;
-          const isActive = item.id === activeModuleId;
+          const isActive = activeModule === item.id;
 
           return (
             <button
+              className={`nav-item ${isActive ? 'active' : ''}`}
               key={item.id}
               type="button"
-              className={`nav-item ${isActive ? "active" : ""}`}
+              title={item.label}
               onClick={() => onModuleChange(item.id)}
             >
-              <Icon size={18} />
-              <span>{item.label}</span>
+              <Icon size={21} />
+              {!isCollapsed && <span>{item.label}</span>}
             </button>
           );
         })}

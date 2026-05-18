@@ -1,38 +1,36 @@
 export default function DashboardModule() {
   return (
     <section className="module-page">
-      <div className="page-title-row">
-        <div>
-          <p className="eyebrow">Overview</p>
-          <h1>Dashboard</h1>
-          <p>Enterprise HR SaaS starter dashboard. Connect real metrics and APIs later.</p>
-        </div>
-      </div>
+      <p className="eyebrow">Overview</p>
+      <h2>Dashboard</h2>
+      <p className="module-description">
+        Enterprise HR SaaS starter dashboard. Connect real metrics, charts, and APIs later.
+      </p>
 
-      <div className="stats-grid">
-        <article className="stat-card">
+      <div className="cards-grid">
+        <article className="metric-card">
           <span>Total Employees</span>
           <strong>248</strong>
           <p>Placeholder metric</p>
         </article>
-        <article className="stat-card">
+        <article className="metric-card">
           <span>Open Roles</span>
           <strong>16</strong>
           <p>Placeholder metric</p>
         </article>
-        <article className="stat-card">
+        <article className="metric-card">
           <span>Payroll Status</span>
           <strong>Ready</strong>
           <p>Placeholder status</p>
         </article>
       </div>
 
-      <div className="module-card wide-card">
+      <article className="info-panel">
         <h3>Enterprise Architecture Ready</h3>
         <p>
           The navigation is config-driven, modules are isolated, the layout is reusable, and theme state is handled globally.
         </p>
-      </div>
+      </article>
     </section>
   );
 }

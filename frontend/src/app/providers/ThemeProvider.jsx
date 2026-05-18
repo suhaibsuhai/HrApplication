@@ -1,22 +1,20 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("hr-theme") || "light";
-  });
+  const [theme, setTheme] = useState(() => localStorage.getItem('hr-suite-theme') || 'dark');
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("hr-theme", theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('hr-suite-theme', theme);
   }, [theme]);
 
   const value = useMemo(
     () => ({
       theme,
       setTheme,
-      toggleTheme: () => setTheme((current) => (current === "light" ? "dark" : "light")),
+      toggleTheme: () => setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark')),
     }),
     [theme]
   );
@@ -28,7 +26,7 @@ export function useTheme() {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error("useTheme must be used inside ThemeProvider");
+    throw new Error('useTheme must be used within ThemeProvider');
   }
 
   return context;

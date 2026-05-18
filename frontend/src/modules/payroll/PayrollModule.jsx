@@ -1,15 +1,29 @@
-import ModulePlaceholder from "../../shared/components/ModulePlaceholder.jsx";
-
 export default function PayrollModule() {
   return (
-    <ModulePlaceholder
-      title="Payroll"
-      description="Future payroll processing, salary structures, deductions, approvals, and reporting."
-      items={[
-        { title: "Payroll Runs", description: "Monthly payroll processing workflow." },
-        { title: "Compensation", description: "Salary, benefits, allowances, and deductions." },
-        { title: "Reports", description: "Finance-ready payroll reports and exports." },
-      ]}
-    />
+    <section className="module-page">
+      <p className="eyebrow">Overview</p>
+      <h2>Payroll</h2>
+      <p className="module-description">
+        This is the Payroll module placeholder. Add routes, API calls, forms, tables, and business workflows here later.
+      </p>
+
+      <div className="cards-grid">
+        <article className="metric-card">
+          <span>Primary Metric</span>
+          <strong>--</strong>
+          <p>Connect real data later.</p>
+        </article>
+        <article className="metric-card">
+          <span>Workflow Status</span>
+          <strong>Ready</strong>
+          <p>Module scaffold is ready.</p>
+        </article>
+        <article className="metric-card">
+          <span>API Integration</span>
+          <strong>Pending</strong>
+          <p>Use services folder for API clients.</p>
+        </article>
+      </div>
+    </section>
   );
 }
