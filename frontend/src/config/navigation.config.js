@@ -1,4 +1,4 @@
-import { Gauge, Users, BarChart3, BriefcaseBusiness, ClipboardCheck } from 'lucide-react';
+import { Gauge, Users, BarChart3, BriefcaseBusiness, ClipboardCheck, Book, BookOpen } from 'lucide-react';
 
 export const navigationItems = [
   {
@@ -7,23 +7,19 @@ export const navigationItems = [
     icon: Gauge,
   },
   {
-    id: 'employees',
-    label: 'Employees',
+    id: 'human-resources',
+    label: 'Human Resources',
     icon: Users,
   },
   {
-    id: 'payroll',
-    label: 'Payroll',
-    icon: BarChart3,
+    id: 'course-management',
+    label: 'Course Management',
+    icon: BookOpen,
   },
   {
     id: 'recruitment',
     label: 'Recruitment',
     icon: BriefcaseBusiness,
   },
-  {
-    id: 'performance',
-    label: 'Performance',
-    icon: ClipboardCheck,
-  },
+  
 ];

@@ -1,13 +1,28 @@
 import { Menu } from 'lucide-react';
 
-export default function Sidebar({ activeModule, isCollapsed, items, onModuleChange, onToggleSidebar }) {
+export default function Sidebar({
+  activeModule,
+  isCollapsed,
+  items,
+  onModuleChange,
+  onToggleSidebar,
+  hideToggle = false,
+}) {
   return (
     <aside className={`sidebar ${isCollapsed ? 'sidebar-collapsed' : ''}`}>
       <div className="sidebar-header">
         {!isCollapsed && <span>Main Navigation</span>}
-        <button className="sidebar-toggle" type="button" aria-label="Toggle sidebar" onClick={onToggleSidebar}>
-          <Menu size={22} />
-        </button>
+
+        {!hideToggle && (
+          <button
+            className="sidebar-toggle"
+            type="button"
+            aria-label="Toggle sidebar"
+            onClick={onToggleSidebar}
+          >
+            <Menu size={22} />
+          </button>
+        )}
       </div>
 
       <nav className="module-nav" aria-label="Main navigation">

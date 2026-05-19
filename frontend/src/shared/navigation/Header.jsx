@@ -7,18 +7,16 @@ export default function Header({ currentModuleTitle }) {
 
   return (
     <header className="app-header">
-      <div className="header-brand">
+      <button
+      className="header-brand home-button"
+      onClick={() => window.location.reload()}
+      >
         <div className="brand-mark">HR</div>
         <div>
           <strong>HR Suite</strong>
           <span>Enterprise SaaS</span>
         </div>
-      </div>
-
-      <div className="header-title-block">
-        <p className="eyebrow">Current Module</p>
-        <h1>{currentModuleTitle}</h1>
-      </div>
+      </button>
 
       <div className="header-actions">
         <button className="icon-button" type="button" aria-label="Search">

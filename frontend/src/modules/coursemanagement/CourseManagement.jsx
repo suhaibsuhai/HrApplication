@@ -1,10 +1,10 @@
-export default function PayrollModule() {
+export default function CourseManagement() {
   return (
     <section className="module-page">
       <p className="eyebrow">Overview</p>
-      <h2>Payroll</h2>
+      <h2>Course Management</h2>
       <p className="module-description">
-        This is the Payroll module placeholder. Add routes, API calls, forms, tables, and business workflows here later.
+        This is the Course Management module placeholder. Add routes, API calls, forms, tables, and business workflows here later.
       </p>
 
       <div className="cards-grid">
