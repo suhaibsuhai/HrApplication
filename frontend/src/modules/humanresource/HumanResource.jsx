@@ -1,73 +1,194 @@
 import {
-  UserPlus,
-  FileSignature,
-  UsersRound,
-  BriefcaseBusiness,
+  BadgeCheck,
+  Banknote,
+  CalendarClock,
+  ClipboardCheck,
+  Plus,
+  Settings,
+  UserRoundCog,
 } from "lucide-react";
 
-const hrSubModules = [
+import HrWorkspaceFrame from "./components/HrWorkspaceFrame.jsx";
+import { hrNavigationItems } from "./config/hrNavigation.js";
+import { useHrBootstrap } from "./hooks/useHrBootstrap.js";
+
+const quickActions = [
+  { id: "employee-management", label: "Add employee", icon: Plus },
+  { id: "attendance-leave", label: "Record attendance", icon: CalendarClock },
+  { id: "payroll", label: "Run payroll", icon: Banknote },
+];
+
+const setupSteps = [
   {
-    id: "add-employee",
-    label: "Add Employee",
-    description: "Create and onboard a new employee profile.",
-    icon: UserPlus,
-    color: "green",
+    id: "hr-settings",
+    title: "Set company rules",
+    text: "Departments, roles, shifts, attendance rules, leave policies, pay cycles.",
+    icon: Settings,
   },
   {
-    id: "contract-generate",
-    label: "Contract Generate",
-    description: "Generate employee contracts and documents.",
-    icon: FileSignature,
-    color: "blue",
+    id: "contract-setup",
+    title: "Define contract categories",
+    text: "Reusable employment rules for permanent, probation, contract, intern, or part-time staff.",
+    icon: BadgeCheck,
   },
   {
-    id: "employee-supervise",
-    label: "Employee Supervise",
-    description: "Monitor employee status and supervision records.",
-    icon: UsersRound,
-    color: "purple",
-  },
-  {
-    id: "add-new-job",
-    label: "Add New Job",
-    description: "Create job openings and recruitment positions.",
-    icon: BriefcaseBusiness,
-    color: "orange",
+    id: "employee-management",
+    title: "Create employees",
+    text: "Map each employee to role, manager, shift, leave, contract pipeline, and salary.",
+    icon: UserRoundCog,
   },
 ];
 
-export default function HumanResource({ onOpenSubModule }) {
+export default function HumanResource({ onModuleChange, onOpenSubModule }) {
+  const { data, isLoading, source } = useHrBootstrap();
+  const dashboard = data.dashboard ?? {};
+  const pendingApprovals = data.approvalRequests ?? [];
+  const payrollRuns = data.payrollRuns ?? [];
+
+  const metrics = [
+    { label: "Employees", value: dashboard.activeEmployees ?? 0, hint: "Active profiles" },
+    { label: "Present today", value: dashboard.presentToday ?? 0, hint: "Time records" },
+    { label: "Pending", value: dashboard.pendingApprovals ?? 0, hint: "Approvals" },
+    { label: "Payroll", value: dashboard.openPayrollRuns ?? 0, hint: "Open runs" },
+  ];
+
+  const meta = (
+    <div className={`hr-api-pill ${source === "api" ? "connected" : ""}`}>
+      <ClipboardCheck size={16} />
+      <span>{isLoading ? "Loading" : source === "api" ? "Backend connected" : "Demo data"}</span>
+    </div>
+  );
+
+  const actions = quickActions.map((action) => {
+    const Icon = action.icon;
+
+    return (
+      <button
+        className="submit-employee-button"
+        key={action.id}
+        onClick={() => onOpenSubModule(action.id)}
+        type="button"
+      >
+        <Icon size={16} />
+        {action.label}
+      </button>
+    );
+  });
+
   return (
-    <section className="module-page">
-      <p className="eyebrow">Human Resources</p>
-      <h2>Human Resources</h2>
-      <p className="module-description">
-        Select a module to manage employee operations, contracts, supervision,
-        and job creation.
-      </p>
+    <HrWorkspaceFrame
+      actions={actions}
+      description="Manage employee setup, attendance, leave, contracts, approvals, payroll, and payslips from one company-ready HR workspace."
+      meta={meta}
+      onModuleChange={onModuleChange}
+      onOpenSubModule={onOpenSubModule}
+      sectionId="overview"
+      title="Overview"
+    >
+      <div className="hr-kpi-row">
+        {metrics.map((metric) => (
+          <article key={metric.label}>
+            <span>{metric.label}</span>
+            <strong>{metric.value}</strong>
+            <small>{metric.hint}</small>
+          </article>
+        ))}
+      </div>
 
-      <div className="hr-submodule-grid">
-        {hrSubModules.map((module) => {
-          const Icon = module.icon;
+      <div className="hr-admin-grid">
+        <section className="hr-primary-panel">
+          <div className="hr-panel-header">
+            <div>
+              <p className="eyebrow">Recommended Order</p>
+              <h3>Start with setup, then employees</h3>
+            </div>
+          </div>
 
-          return (
-            <button
-              key={module.id}
-              className={`hr-submodule-card ${module.color}`}
-              onClick={() => onOpenSubModule(module.id)}
-            >
-              <span className="hr-submodule-icon">
-                <Icon size={30} />
-              </span>
+          <div className="hr-next-steps">
+            {setupSteps.map((step, index) => {
+              const Icon = step.icon;
 
-              <span className="hr-submodule-title">{module.label}</span>
-              <span className="hr-submodule-description">
-                {module.description}
+              return (
+                <button
+                  className="hr-next-step"
+                  key={step.id}
+                  onClick={() => onOpenSubModule(step.id)}
+                  type="button"
+                >
+                  <span className="hr-step-number">{index + 1}</span>
+                  <span className="hr-category-icon blue">
+                    <Icon size={18} />
+                  </span>
+                  <span>
+                    <strong>{step.title}</strong>
+                    <small>{step.text}</small>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="hr-side-panel">
+          <div className="hr-panel-header">
+            <div>
+              <p className="eyebrow">Needs Attention</p>
+              <h3>Work queue</h3>
+            </div>
+          </div>
+
+          <div className="hr-attention-list">
+            <button type="button" onClick={() => onOpenSubModule("approvals")}>
+              <BadgeCheck size={18} />
+              <span>
+                <strong>{pendingApprovals.length} approvals</strong>
+                <small>Leave, contract, attendance, and payroll decisions</small>
               </span>
             </button>
-          );
-        })}
+            <button type="button" onClick={() => onOpenSubModule("payroll")}>
+              <Banknote size={18} />
+              <span>
+                <strong>{payrollRuns.length} payroll runs</strong>
+                <small>Calculated or draft payslips waiting for review</small>
+              </span>
+            </button>
+            <button type="button" onClick={() => onOpenSubModule("attendance-leave")}>
+              <CalendarClock size={18} />
+              <span>
+                <strong>{dashboard.pendingLeave ?? 0} leave requests</strong>
+                <small>Balances and requests connected to employee policies</small>
+              </span>
+            </button>
+          </div>
+        </section>
       </div>
-    </section>
+
+      <section className="hr-primary-panel hr-full-panel">
+        <div className="hr-panel-header">
+          <div>
+            <p className="eyebrow">Workspace</p>
+            <h3>HR areas</h3>
+          </div>
+        </div>
+
+        <div className="hr-section-list">
+          {hrNavigationItems
+            .filter((item) => item.id !== "overview")
+            .map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <button key={item.id} onClick={() => onOpenSubModule(item.id)} type="button">
+                  <Icon size={19} />
+                  <span>
+                    <strong>{item.label}</strong>
+                    <small>{item.description}</small>
+                  </span>
+                </button>
+              );
+            })}
+        </div>
+      </section>
+    </HrWorkspaceFrame>
   );
 }

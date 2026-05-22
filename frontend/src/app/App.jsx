@@ -8,16 +8,22 @@ import HumanResource from "../modules/humanresource/HumanResource.jsx";
 import CourseManagement from "../modules/coursemanagement/CourseManagement.jsx";
 import RecruitmentModule from "../modules/recruitment/RecruitmentModule.jsx";
 
-import AddEmployeePage from "../modules/humanresource/pages/AddEmployeePage.jsx";
-import ContractGeneratePage from "../modules/humanresource/pages/ContractGeneratePage.jsx";
-import EmployeeSupervisePage from "../modules/humanresource/pages/EmployeeSupervisePage.jsx";
-import AddNewJobPage from "../modules/humanresource/pages/AddNewJobPage.jsx";
+import EmployeeManagementPage from "../modules/humanresource/pages/EmployeeManagementPage.jsx";
+import AttendanceLeavePage from "../modules/humanresource/pages/AttendanceLeavePage.jsx";
+import ContractSetupPage from "../modules/humanresource/pages/ContractSetupPage.jsx";
+import ContractPipelinesPage from "../modules/humanresource/pages/ContractPipelinesPage.jsx";
+import ApprovalsPage from "../modules/humanresource/pages/ApprovalsPage.jsx";
+import PayrollPage from "../modules/humanresource/pages/PayrollPage.jsx";
+import HrSettingsPage from "../modules/humanresource/pages/HrSettingsPage.jsx";
 
 const subModuleRegistry = {
-  "add-employee": AddEmployeePage,
-  "contract-generate": ContractGeneratePage,
-  "employee-supervise": EmployeeSupervisePage,
-  "add-new-job": AddNewJobPage,
+  "hr-settings": HrSettingsPage,
+  "employee-management": EmployeeManagementPage,
+  "attendance-leave": AttendanceLeavePage,
+  "contract-setup": ContractSetupPage,
+  "contract-pipelines": ContractPipelinesPage,
+  approvals: ApprovalsPage,
+  payroll: PayrollPage,
 };
 
 export default function App() {
@@ -35,20 +41,27 @@ export default function App() {
   const ActiveSubModulePage = subModuleRegistry[activeSubModule];
 
   if (ActiveSubModulePage) {
-  return (
-    <ActiveSubModulePage
-      onModuleChange={(moduleId) => {
-        setActiveSubModule(null);
-        setActiveModule(moduleId);
-      }}
-    />
-  );
-}
+    return (
+      <ActiveSubModulePage
+        onOpenSubModule={setActiveSubModule}
+        onModuleChange={(moduleId) => {
+          setActiveSubModule(null);
+          setActiveModule(moduleId);
+        }}
+      />
+    );
+  }
 
   const moduleRegistry = {
     dashboard: DashboardModule,
     "human-resources": () => (
-      <HumanResource onOpenSubModule={setActiveSubModule} />
+      <HumanResource
+        onModuleChange={(moduleId) => {
+          setActiveSubModule(null);
+          setActiveModule(moduleId);
+        }}
+        onOpenSubModule={setActiveSubModule}
+      />
     ),
     "course-management": CourseManagement,
     recruitment: RecruitmentModule,
