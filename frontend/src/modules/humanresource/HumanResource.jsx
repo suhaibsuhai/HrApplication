@@ -1,194 +1,158 @@
-import {
-  BadgeCheck,
-  Banknote,
-  CalendarClock,
-  ClipboardCheck,
-  Plus,
-  Settings,
-  UserRoundCog,
-} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { useMemo, useState } from "react";
 
-import HrWorkspaceFrame from "./components/HrWorkspaceFrame.jsx";
 import { hrNavigationItems } from "./config/hrNavigation.js";
-import { useHrBootstrap } from "./hooks/useHrBootstrap.js";
+import { demoHrBootstrap } from "./data/demoHrData.js";
 
-const quickActions = [
-  { id: "employee-management", label: "Add employee", icon: Plus },
-  { id: "attendance-leave", label: "Record attendance", icon: CalendarClock },
-  { id: "payroll", label: "Run payroll", icon: Banknote },
-];
-
-const setupSteps = [
+const progressCards = [
   {
-    id: "hr-settings",
-    title: "Set company rules",
-    text: "Departments, roles, shifts, attendance rules, leave policies, pay cycles.",
-    icon: Settings,
+    label: "Attendance",
+    valueKey: "presentToday",
+    totalKey: "activeEmployees",
+    helper: "Present today",
   },
   {
-    id: "contract-setup",
-    title: "Define contract categories",
-    text: "Reusable employment rules for permanent, probation, contract, intern, or part-time staff.",
-    icon: BadgeCheck,
+    label: "Approvals",
+    valueKey: "pendingApprovals",
+    totalKey: "employeesInPipelines",
+    helper: "Pending review",
   },
   {
-    id: "employee-management",
-    title: "Create employees",
-    text: "Map each employee to role, manager, shift, leave, contract pipeline, and salary.",
-    icon: UserRoundCog,
+    label: "Payroll",
+    valueKey: "openPayrollRuns",
+    totalKey: "activeEmployees",
+    helper: "Open runs",
   },
 ];
 
-export default function HumanResource({ onModuleChange, onOpenSubModule }) {
-  const { data, isLoading, source } = useHrBootstrap();
-  const dashboard = data.dashboard ?? {};
-  const pendingApprovals = data.approvalRequests ?? [];
-  const payrollRuns = data.payrollRuns ?? [];
+const placeholderRows = {
+  "hr-settings": ["Departments", "Locations", "Job roles", "Shifts"],
+  "employee-management": ["Employee profile", "Assignments", "Personal details", "Salary details"],
+  "attendance-leave": ["Attendance records", "Leave requests", "Leave balance", "Absence status"],
+  "contract-setup": ["Contract categories", "Notice periods", "Probation rules", "Salary structures"],
+  "contract-pipelines": ["Pipeline stages", "Contract reviews", "Permanent decisions", "Active tracks"],
+  approvals: ["Leave approval", "Contract approval", "Payroll approval", "Manager review"],
+  payroll: ["Payroll runs", "Payslips", "Gross pay", "Net pay"],
+};
 
-  const metrics = [
-    { label: "Employees", value: dashboard.activeEmployees ?? 0, hint: "Active profiles" },
-    { label: "Present today", value: dashboard.presentToday ?? 0, hint: "Time records" },
-    { label: "Pending", value: dashboard.pendingApprovals ?? 0, hint: "Approvals" },
-    { label: "Payroll", value: dashboard.openPayrollRuns ?? 0, hint: "Open runs" },
-  ];
+function getProgress(value, total) {
+  if (!total) return 0;
+  return Math.min(100, Math.round((value / total) * 100));
+}
 
-  const meta = (
-    <div className={`hr-api-pill ${source === "api" ? "connected" : ""}`}>
-      <ClipboardCheck size={16} />
-      <span>{isLoading ? "Loading" : source === "api" ? "Backend connected" : "Demo data"}</span>
-    </div>
+export default function HumanResource() {
+  const [activePageId, setActivePageId] = useState("overview");
+  const dashboard = demoHrBootstrap.dashboard;
+  const activePage = hrNavigationItems.find((item) => item.id === activePageId);
+  const moduleCards = hrNavigationItems.filter((item) => item.id !== "overview");
+
+  const countCards = useMemo(
+    () => [
+      { label: "Active Employees", value: dashboard.activeEmployees, progress: 100 },
+      { label: "Present Today", value: dashboard.presentToday, progress: getProgress(dashboard.presentToday, dashboard.activeEmployees) },
+      { label: "Pending Leave", value: dashboard.pendingLeave, progress: getProgress(dashboard.pendingLeave, dashboard.activeEmployees) },
+      { label: "Pending Approvals", value: dashboard.pendingApprovals, progress: getProgress(dashboard.pendingApprovals, dashboard.activeEmployees) },
+    ],
+    [dashboard]
   );
 
-  const actions = quickActions.map((action) => {
-    const Icon = action.icon;
+  if (activePageId !== "overview" && activePage) {
+    const Icon = activePage.icon;
+    const pageRows = placeholderRows[activePageId] ?? ["Overview", "Records", "Requests", "Reports"];
 
     return (
-      <button
-        className="submit-employee-button"
-        key={action.id}
-        onClick={() => onOpenSubModule(action.id)}
-        type="button"
-      >
-        <Icon size={16} />
-        {action.label}
-      </button>
+      <section className="hr-dashboard-shell">
+        <div className="hr-page-header">
+          <button className="hr-back-button" type="button" onClick={() => setActivePageId("overview")}>
+            <ArrowLeft size={17} />
+            Dashboard
+          </button>
+          <div className="hr-title-block">
+            <span className="eyebrow">Human Resources</span>
+            <h2>{activePage.label}</h2>
+            <p>{activePage.description}</p>
+          </div>
+        </div>
+
+        <div className="hr-simple-page-grid">
+          {pageRows.map((row) => (
+            <article className="hr-simple-page-card" key={row}>
+              <Icon size={24} />
+              <strong>{row}</strong>
+              <span>Simple page placeholder</span>
+            </article>
+          ))}
+        </div>
+      </section>
     );
-  });
+  }
 
   return (
-    <HrWorkspaceFrame
-      actions={actions}
-      description="Manage employee setup, attendance, leave, contracts, approvals, payroll, and payslips from one company-ready HR workspace."
-      meta={meta}
-      onModuleChange={onModuleChange}
-      onOpenSubModule={onOpenSubModule}
-      sectionId="overview"
-      title="Overview"
-    >
-      <div className="hr-kpi-row">
-        {metrics.map((metric) => (
-          <article key={metric.label}>
-            <span>{metric.label}</span>
-            <strong>{metric.value}</strong>
-            <small>{metric.hint}</small>
+    <section className="hr-dashboard-shell">
+      <div className="hr-page-header">
+        <div className="hr-title-block">
+          <span className="eyebrow">Human Resources</span>
+          <h2>HR Dashboard</h2>
+          <p>Counts, progress, and module navigation.</p>
+        </div>
+      </div>
+
+      <div className="hr-count-grid">
+        {countCards.map((card) => (
+          <article className="hr-count-card" key={card.label}>
+            <span>{card.label}</span>
+            <strong>{card.value}</strong>
+            <div className="hr-progress-track" aria-label={`${card.label} progress`}>
+              <div style={{ width: `${card.progress}%` }} />
+            </div>
+            <small>{card.progress}% progress</small>
           </article>
         ))}
       </div>
 
-      <div className="hr-admin-grid">
-        <section className="hr-primary-panel">
-          <div className="hr-panel-header">
-            <div>
-              <p className="eyebrow">Recommended Order</p>
-              <h3>Start with setup, then employees</h3>
-            </div>
-          </div>
+      <div className="hr-progress-row">
+        {progressCards.map((card) => {
+          const value = dashboard[card.valueKey];
+          const total = dashboard[card.totalKey];
+          const progress = getProgress(value, total);
 
-          <div className="hr-next-steps">
-            {setupSteps.map((step, index) => {
-              const Icon = step.icon;
-
-              return (
-                <button
-                  className="hr-next-step"
-                  key={step.id}
-                  onClick={() => onOpenSubModule(step.id)}
-                  type="button"
-                >
-                  <span className="hr-step-number">{index + 1}</span>
-                  <span className="hr-category-icon blue">
-                    <Icon size={18} />
-                  </span>
-                  <span>
-                    <strong>{step.title}</strong>
-                    <small>{step.text}</small>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="hr-side-panel">
-          <div className="hr-panel-header">
-            <div>
-              <p className="eyebrow">Needs Attention</p>
-              <h3>Work queue</h3>
-            </div>
-          </div>
-
-          <div className="hr-attention-list">
-            <button type="button" onClick={() => onOpenSubModule("approvals")}>
-              <BadgeCheck size={18} />
-              <span>
-                <strong>{pendingApprovals.length} approvals</strong>
-                <small>Leave, contract, attendance, and payroll decisions</small>
-              </span>
-            </button>
-            <button type="button" onClick={() => onOpenSubModule("payroll")}>
-              <Banknote size={18} />
-              <span>
-                <strong>{payrollRuns.length} payroll runs</strong>
-                <small>Calculated or draft payslips waiting for review</small>
-              </span>
-            </button>
-            <button type="button" onClick={() => onOpenSubModule("attendance-leave")}>
-              <CalendarClock size={18} />
-              <span>
-                <strong>{dashboard.pendingLeave ?? 0} leave requests</strong>
-                <small>Balances and requests connected to employee policies</small>
-              </span>
-            </button>
-          </div>
-        </section>
+          return (
+            <article className="hr-progress-card" key={card.label}>
+              <div>
+                <span>{card.label}</span>
+                <strong>
+                  {value}/{total}
+                </strong>
+              </div>
+              <div className="hr-progress-track">
+                <div style={{ width: `${progress}%` }} />
+              </div>
+              <small>{card.helper}</small>
+            </article>
+          );
+        })}
       </div>
 
-      <section className="hr-primary-panel hr-full-panel">
-        <div className="hr-panel-header">
-          <div>
-            <p className="eyebrow">Workspace</p>
-            <h3>HR areas</h3>
-          </div>
-        </div>
+      <div className="hr-module-card-grid">
+        {moduleCards.map((item) => {
+          const Icon = item.icon;
 
-        <div className="hr-section-list">
-          {hrNavigationItems
-            .filter((item) => item.id !== "overview")
-            .map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <button key={item.id} onClick={() => onOpenSubModule(item.id)} type="button">
-                  <Icon size={19} />
-                  <span>
-                    <strong>{item.label}</strong>
-                    <small>{item.description}</small>
-                  </span>
-                </button>
-              );
-            })}
-        </div>
-      </section>
-    </HrWorkspaceFrame>
+          return (
+            <button
+              className="hr-module-card"
+              key={item.id}
+              type="button"
+              onClick={() => setActivePageId(item.id)}
+            >
+              <span className="hr-module-card-icon">
+                <Icon size={24} />
+              </span>
+              <strong>{item.label}</strong>
+              <small>{item.description}</small>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 }

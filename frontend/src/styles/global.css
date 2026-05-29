@@ -1954,33 +1954,273 @@ select:focus-visible {
   }
 }
 
-@media (max-width: 720px) {
-  .hr-submodule-grid.expanded,
-  .hr-category-grid.two {
+.main-content-fixed,
+.main-content:has(.hr-dashboard-shell) {
+  overflow: hidden;
+}
+
+.hr-dashboard-shell {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  gap: 12px;
+  height: 100%;
+  max-width: 1320px;
+  overflow: hidden;
+}
+
+.hr-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 58px;
+}
+
+.hr-title-block {
+  min-width: 0;
+}
+
+.hr-title-block h2 {
+  margin: 0 0 4px;
+  color: var(--text-primary);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.hr-title-block p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.hr-count-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hr-count-card,
+.hr-progress-card,
+.hr-module-card,
+.hr-simple-page-card {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-elevated);
+  box-shadow: none;
+}
+
+.hr-count-card {
+  min-height: 112px;
+  padding: 14px;
+}
+
+.hr-count-card span,
+.hr-progress-card span,
+.hr-count-card small,
+.hr-progress-card small,
+.hr-module-card small,
+.hr-simple-page-card span {
+  color: var(--text-secondary);
+}
+
+.hr-count-card span,
+.hr-progress-card span {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.hr-count-card strong {
+  display: block;
+  margin: 8px 0 10px;
+  color: var(--text-primary);
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.hr-progress-track {
+  height: 10px;
+  background: #edf2f7;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.hr-progress-track div {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #06b6d4,
+    #3b82f6,
+    #6366f1
+  );
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.hr-count-card small,
+.hr-progress-card small {
+  display: block;
+  margin-top: 7px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.hr-progress-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hr-progress-card {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.4fr) minmax(0, 1fr);
+  gap: 8px 12px;
+  align-items: center;
+  min-height: 78px;
+  padding: 12px 14px;
+}
+
+.hr-progress-card strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.hr-progress-card small {
+  grid-column: 2;
+  margin-top: 0;
+}
+
+.hr-module-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+}
+
+.hr-module-card {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 8px;
+  min-height: 0;
+  padding: 14px;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.hr-module-card:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.hr-module-card-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.hr-module-card strong,
+.hr-simple-page-card strong {
+  color: var(--text-primary);
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.hr-module-card small {
+  overflow: hidden;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.hr-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.hr-back-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.hr-simple-page-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 10px;
+  min-height: 0;
+}
+
+.hr-simple-page-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 160px;
+  padding: 16px;
+}
+
+.hr-simple-page-card svg {
+  color: var(--accent);
+}
+
+@media (max-width: 1180px) {
+  .hr-module-card-grid,
+  .hr-simple-page-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .hr-dashboard-shell {
+    gap: 10px;
+  }
+
+  .hr-count-grid,
+  .hr-module-card-grid,
+  .hr-simple-page-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hr-progress-row {
     grid-template-columns: 1fr;
   }
 
-  .hr-kpi-row,
-  .hr-section-list {
+  .hr-progress-card {
+    min-height: 66px;
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content-fixed,
+  .main-content:has(.hr-dashboard-shell) {
+    padding: 14px;
+  }
+
+  .hr-title-block h2 {
+    font-size: 1.25rem;
+  }
+
+  .hr-count-grid,
+  .hr-module-card-grid,
+  .hr-simple-page-grid {
     grid-template-columns: 1fr;
-  }
-
-  .hr-form-panel .hr-panel-header .submit-employee-button {
-    display: none;
-  }
-
-  .hr-mobile-submit {
-    display: inline-flex;
-  }
-
-  .approval-card,
-  .pipeline-row {
-    grid-template-columns: 40px minmax(0, 1fr);
-  }
-
-  .approval-card .record-status,
-  .pipeline-row .employee-count-pill {
-    grid-column: 2;
-    justify-self: start;
   }
 }

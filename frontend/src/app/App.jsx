@@ -4,27 +4,10 @@ import MainLayout from "../layouts/MainLayout.jsx";
 import { navigationItems } from "../config/navigation.config.js";
 
 import DashboardModule from "../modules/dashboard/DashboardModule.jsx";
-import HumanResource from "../modules/humanresource/HumanResource.jsx";
 import CourseManagement from "../modules/coursemanagement/CourseManagement.jsx";
+import HumanResource from "../modules/humanresource/HumanResource.jsx";
 import RecruitmentModule from "../modules/recruitment/RecruitmentModule.jsx";
 
-import EmployeeManagementPage from "../modules/humanresource/pages/EmployeeManagementPage.jsx";
-import AttendanceLeavePage from "../modules/humanresource/pages/AttendanceLeavePage.jsx";
-import ContractSetupPage from "../modules/humanresource/pages/ContractSetupPage.jsx";
-import ContractPipelinesPage from "../modules/humanresource/pages/ContractPipelinesPage.jsx";
-import ApprovalsPage from "../modules/humanresource/pages/ApprovalsPage.jsx";
-import PayrollPage from "../modules/humanresource/pages/PayrollPage.jsx";
-import HrSettingsPage from "../modules/humanresource/pages/HrSettingsPage.jsx";
-
-const subModuleRegistry = {
-  "hr-settings": HrSettingsPage,
-  "employee-management": EmployeeManagementPage,
-  "attendance-leave": AttendanceLeavePage,
-  "contract-setup": ContractSetupPage,
-  "contract-pipelines": ContractPipelinesPage,
-  approvals: ApprovalsPage,
-  payroll: PayrollPage,
-};
 
 export default function App() {
   const [activeModule, setActiveModule] = useState("dashboard");
@@ -38,19 +21,7 @@ export default function App() {
     [activeModule]
   );
 
-  const ActiveSubModulePage = subModuleRegistry[activeSubModule];
-
-  if (ActiveSubModulePage) {
-    return (
-      <ActiveSubModulePage
-        onOpenSubModule={setActiveSubModule}
-        onModuleChange={(moduleId) => {
-          setActiveSubModule(null);
-          setActiveModule(moduleId);
-        }}
-      />
-    );
-  }
+  
 
   const moduleRegistry = {
     dashboard: DashboardModule,
